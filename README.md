@@ -6,6 +6,8 @@ A starter kit for teams that let developers write code with AI tools. Written fo
 |---|---|
 | `AGENTS.md` | Rules the AI tool follows. Copy to your repo root and edit the Frappe section. |
 | `CLAUDE.md` | One line, `@AGENTS.md`, so Claude Code reads the same rules. |
+| `GEMINI.md` | One line, `@AGENTS.md`, for Gemini CLI. |
+| `.aider.conf.yml` | Tells Aider to load `AGENTS.md`. |
 | `.github/pull_request_template.md` | PR template with an AI-disclosure field. Copy to your repo's `.github/`. |
 | This README | How developers should set up and work. |
 
@@ -26,17 +28,23 @@ You own every line you merge, whoever or whatever wrote it. These tools are fast
 
 `AGENTS.md` is the single source of truth. Do not copy the rules into other files; point those files at it.
 
-| Tool | Reads `AGENTS.md`? | What to do |
+| Tool | How it gets the rules | Files in this kit |
 |---|---|---|
-| Codex | Yes, natively | Nothing. |
-| Cursor | Yes | Nothing. |
-| GitHub Copilot | Yes (also reads `.github/copilot-instructions.md`) | Nothing. |
-| Windsurf | Yes | Nothing. |
-| Claude Code | No | Keep `CLAUDE.md` with `@AGENTS.md` (included). |
-| Gemini CLI | Not by default; native file is `GEMINI.md` | Add `.gemini/settings.json`: `{ "contextFileName": "AGENTS.md" }`, or a `GEMINI.md` containing `@AGENTS.md`. |
-| Aider | Not by default | Add `.aider.conf.yml`: `read: AGENTS.md`. |
+| Codex, Cursor, Zed, Windsurf, JetBrains Junie, VS Code, Warp, Devin, Amp, opencode, goose, Roo Code, Kilo Code, Jules, Factory, Augment Code and others on the [agents.md list](https://agents.md) | Read `AGENTS.md` natively | `AGENTS.md` |
+| GitHub Copilot (coding agent, CLI) | Reads `AGENTS.md` and also `.github/copilot-instructions.md`. If both exist, both are used. | `AGENTS.md` |
+| Claude Code | Does not read `AGENTS.md`. Reads `CLAUDE.md`. | `CLAUDE.md` containing `@AGENTS.md` |
+| Gemini CLI | Default file is `GEMINI.md`, and it supports `@file` imports. | `GEMINI.md` containing `@AGENTS.md` |
+| Aider | Loads files named by `read:` in `.aider.conf.yml`, as read-only context. | `.aider.conf.yml` with `read: AGENTS.md` |
+| Cline, Continue, Amazon Q, Kiro and other tools with their own rules folder | Not confirmed. Check the tool's docs. | None. If it can't read `AGENTS.md`, add a tiny file that points to it, like `CLAUDE.md`. |
 
-This table comes from secondary sources and some of them disagree (Gemini CLI and Aider especially). Check each tool's own docs and test: ask the tool "what rules do you have for this repo?" and see if it quotes `AGENTS.md`. Tools also cap file size (Codex reads about 32 KiB), so keep `AGENTS.md` short.
+Rules live only in `AGENTS.md`. The other files are one-line pointers, so the rules cannot drift between tools. Do not paste the rules into tool-specific files.
+
+How this was checked: the Gemini CLI import and `fileName` behaviour comes from its docs, the Aider `read:` syntax from Aider's docs, and Copilot behaviour from GitHub's docs. The "native `AGENTS.md`" list comes from agents.md, so it is the projects' own claim. Tool behaviour changes often. After setup, test each tool you use: ask it "what rules do you have for this repo?" and check that it quotes `AGENTS.md`.
+
+Notes:
+- Copilot also reads `CLAUDE.md` and `GEMINI.md`, which only contain an import line. That is harmless, but if Copilot shows the literal `@AGENTS.md` line, ignore it.
+- Tools cap context file size (Codex about 32 KiB). Keep `AGENTS.md` short.
+- Nested `AGENTS.md` files for subfolders are supported by several tools, with the closest file winning. Use them for area-specific rules.
 
 ## 2. How to work
 
