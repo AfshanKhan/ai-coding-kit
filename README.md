@@ -17,9 +17,26 @@ You own every line you merge, whoever or whatever wrote it. These tools are fast
 2. Clone the repo. Rules load automatically:
    - `AGENTS.md` holds the rules (Codex and most tools read it directly).
    - `CLAUDE.md` contains `@AGENTS.md`, so Claude Code reads the same file.
+   - Other tools: see the compatibility table below.
 3. Install the lint hooks: `pre-commit install`.
 4. Never put customer data, secrets, API keys or prod dumps into a prompt, a file the tool can read, or a commit.
 5. Run the tool against a dev bench only. No prod credentials in your shell.
+
+### Which tool reads what
+
+`AGENTS.md` is the single source of truth. Do not copy the rules into other files; point those files at it.
+
+| Tool | Reads `AGENTS.md`? | What to do |
+|---|---|---|
+| Codex | Yes, natively | Nothing. |
+| Cursor | Yes | Nothing. |
+| GitHub Copilot | Yes (also reads `.github/copilot-instructions.md`) | Nothing. |
+| Windsurf | Yes | Nothing. |
+| Claude Code | No | Keep `CLAUDE.md` with `@AGENTS.md` (included). |
+| Gemini CLI | Not by default; native file is `GEMINI.md` | Add `.gemini/settings.json`: `{ "contextFileName": "AGENTS.md" }`, or a `GEMINI.md` containing `@AGENTS.md`. |
+| Aider | Not by default | Add `.aider.conf.yml`: `read: AGENTS.md`. |
+
+This table comes from secondary sources and some of them disagree (Gemini CLI and Aider especially). Check each tool's own docs and test: ask the tool "what rules do you have for this repo?" and see if it quotes `AGENTS.md`. Tools also cap file size (Codex reads about 32 KiB), so keep `AGENTS.md` short.
 
 ## 2. How to work
 
