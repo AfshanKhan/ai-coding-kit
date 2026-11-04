@@ -84,20 +84,11 @@ Do not stack all of them without a reason. They overlap, and each adds instructi
 
 Install commands change. Check each project's own README before installing.
 
-## 6. Trial results (one repo, small sample)
-
-We ran the same task with and without the rules, headless, two runs each, on one Frappe app:
-
-- Without rules: tests added 0/2, `pre-commit` run 0/2, existing helper reused 1/2.
-- With the tightened rules: tests 2/2, `pre-commit` 2/2, helper reused 2/2, permission pattern copied from neighbours 2/2.
-- Honesty about untested work was good in every run.
-- Rules improved process, not design judgement. Review still matters.
-
-## 7. Changing the rules
+## 6. Changing the rules
 
 If you keep correcting the tool for the same mistake, add one line to `AGENTS.md` in a PR with the reason. Keep the file short; every rule must be checkable.
 
-## 8. Credits and sources
+## 7. Credits and sources
 
 The rules are adapted from public projects. Read them for more:
 
